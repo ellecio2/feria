@@ -1,0 +1,780 @@
+.font-icon-box {
+    font-size: 13px;
+}
+
+.text-detalles {
+    font-size: 25px;
+    color: #333;
+    font-weight: bold;
+}
+
+.icon-box-padding {
+    padding-right: 5px;
+}
+
+.pricetxt {
+    flex: 0 0 50%;
+    margin-right: 10px;
+}
+
+
+.textdealer {
+    text-align: center;
+}
+
+.txtmonth {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 2%;
+    text-align: center;
+}
+
+.pagomens {
+    font-weight: bold;
+    padding-bottom: 2%;
+    text-align: center;
+}
+
+.dealer-item {
+    flex: none;
+    width: 130px;
+    height: 60px;
+    min-width: 130px;
+    margin-bottom: 10px;
+    // border-radius: 8px;
+    // padding: 8px;
+    // background: white;
+    // cursor: pointer;
+    // transition: all 0.3s ease;
+    
+    // ← PREVENIR SELECCIÓN
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    
+    // ← PREVENIR DRAG DE IMAGEN
+    img {
+        border-radius: 150px;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        pointer-events: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-user-drag: none; // ← IMPORTANTE
+        -webkit-touch-callout: none;
+    }
+}
+
+// SLIDER SUAVE - FORZAR ANCHO TOTAL
+.bank-selector {
+    margin: 20px 0;
+    width: 100%;
+    overflow-x: auto; // ← CAMBIO: permitir scroll horizontal del contenedor
+    overflow-y: hidden;
+    position: relative;
+}
+
+.banks-scroll {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 15px 0;
+    gap: 15px;
+    width: max-content;
+    min-width: 100%;
+    
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+    
+    // ← PREVENIR SELECCIÓN DE TEXTO
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    
+    &:active {
+        cursor: grabbing;
+    }
+}
+
+.bank-item {
+    flex: none;
+    width: 130px;
+    height: 85px;
+    min-width: 130px;
+    
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    // ← PREVENIR SELECCIÓN
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    
+    // ← PREVENIR DRAG DE IMAGEN
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        pointer-events: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-user-drag: none; // ← IMPORTANTE
+        -webkit-touch-callout: none;
+    }
+}
+
+// Ocultar scrollbar del contenedor padre
+.bank-selector {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+// TOGGLE MÓVIL
+.footer-heading-mobie {
+    position: relative;
+
+    h2 {
+        margin: 0;
+        font-size: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &:after {
+            content: '+';
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            transition: all 0.3s ease;
+            line-height: 1;
+        }
+    }
+
+    &.active {
+        background: #007bff;
+        color: white;
+
+        h2 {
+            color: white;
+
+            &:after {
+                content: '−';
+                color: white;
+            }
+        }
+    }
+
+    &:hover:not(.active) {
+        background: #e9ecef;
+    }
+}
+
+.tf-collapse-content {
+    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+
+    &.show {
+        display: block !important;
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// RESPONSIVE
+@media (max-width: 768px) {
+    .footer-heading-desktop {
+        display: none !important;
+    }
+
+    .footer-heading-mobie {
+        display: block !important;
+    }
+
+    .footer-col-block .tf-collapse-content {
+        display: none;
+    }
+    
+    .bank-item {
+        width: 115px !important;
+        height: 75px !important;
+        min-width: 115px !important;
+    }
+    
+    .banks-scroll {
+        gap: 12px;
+        padding: 10px 5px;
+    }
+}
+
+@media (min-width: 769px) {
+    .footer-heading-mobie {
+        display: none !important;
+    }
+
+    .footer-heading-desktop {
+        display: block !important;
+    }
+
+    .tf-collapse-content {
+        display: block !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    
+    .bank-item {
+        width: 130px !important;
+        height: 85px !important;
+        min-width: 130px !important;
+    }
+}
+
+// Información del banco seleccionado
+.bank-info {
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    
+    &.show {
+        animation: slideInUp 0.4s ease-out;
+    }
+}
+
+.bank-info-content {
+    text-align: center;
+}
+
+.bank-name {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.bank-details {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.bank-detail-item {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,123,255,0.1);
+    }
+}
+
+.detail-label {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.detail-value {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.loading-indicator {
+    margin-top: 15px;
+    padding: 10px;
+    color: #666;
+    font-style: italic;
+    
+    span {
+        position: relative;
+        
+        &::after {
+            content: '';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+    }
+}
+
+// Animación de entrada
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes dots {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .bank-details {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .bank-detail-item {
+        min-width: auto;
+    }
+    
+    .bank-name {
+        font-size: 16px;
+    }
+}
+
+// Estilos que imitan perfectamente nice-select
+.custom-select {
+    -webkit-tap-highlight-color: transparent;
+    background-color: #fff;
+    border: 1px solid #E5E5EA !important;
+    border-radius: 14px;
+    padding: 14px 17px;
+    box-sizing: border-box;
+    clear: both;
+    cursor: pointer;
+    display: block;
+    font-family: var(--paraFont);
+    font-size: 16px;
+    font-weight: 400;
+    outline: none;
+    position: relative;
+    transition: all linear .2s;
+    user-select: none;
+    white-space: nowrap;
+    width: 100%;
+    
+    // Estados activo, abierto y focus
+    &:active,
+    &.open,
+    &:focus {
+        border-color: #999;
+    }
+    
+    // Flecha exactamente igual
+    &::after {
+        border-bottom: 1.7px solid #3A3A3C;
+        border-right: 1.7px solid #3A3A3C;
+        content: '';
+        height: 8px;
+        width: 8px;
+        margin-top: -4px;
+        pointer-events: none;
+        position: absolute;
+        right: 24px;
+        top: 50%;
+        -webkit-transform-origin: 66% 66%;
+        -ms-transform-origin: 66% 66%;
+        transform-origin: 66% 66%;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+        -webkit-transition: all 0.15s ease-in-out;
+        transition: all 0.15s ease-in-out;
+    }
+    
+    // Flecha cuando está abierto
+    &.open::after {
+        -webkit-transform: rotate(-135deg);
+        -ms-transform: rotate(-135deg);
+        transform: rotate(-135deg);
+        -moz-transform: rotate(-135deg);
+        -o-transform: rotate(-135deg);
+    }
+    
+    // Estado deshabilitado
+    &.disabled {
+        border-color: #ededed;
+        color: #999;
+        pointer-events: none;
+        
+        &::after {
+            border-color: #cccccc;
+        }
+    }
+    
+    // Lista desplegable (copia exacta)
+    .list {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 0 1px rgba(68, 68, 68, 0.11);
+        box-sizing: border-box;
+        margin-top: 4px;
+        opacity: 0;
+        overflow: hidden;
+        padding: 0;
+        pointer-events: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        -webkit-transform-origin: 50% 0;
+        -ms-transform-origin: 50% 0;
+        transform-origin: 50% 0;
+        -webkit-transform: scale(0.75) translateY(-21px);
+        -ms-transform: scale(0.75) translateY(-21px);
+        transform: scale(0.75) translateY(-21px);
+        -webkit-transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
+        transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
+        z-index: 9;
+        width: 100%;
+        font-size: 14px;
+        max-height: 155px;
+        overflow: auto;
+        
+        // Scrollbar personalizada (copia exacta)
+        &::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgb(0 0 0 / 30%);
+            background-color: #f5f5f5;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -webkit-transform: translate3d(0,0,0);
+            -moz-transform: translate3d(0,0,0);
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background-color: #a7a7a7;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -webkit-transform: translate3d(0,0,0);
+            -moz-transform: translate3d(0,0,0);
+        }
+        
+        &::-webkit-scrollbar {
+            width: 6px;
+            height: 4px;
+            background-color: #f5f5f5;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -webkit-transform: translate3d(0,0,0);
+            -moz-transform: translate3d(0,0,0);
+        }
+        
+        // Efecto hover en lista
+        &:hover .option:not(:hover) {
+            background-color: transparent !important;
+        }
+    }
+    
+    // Lista cuando está abierto
+    &.open .list {
+        opacity: 1;
+        z-index: 10;
+        pointer-events: auto;
+        -webkit-transform: scale(1) translateY(0);
+        -ms-transform: scale(1) translateY(0);
+        transform: scale(1) translateY(0);
+        width: 100%;
+        -moz-transform: scale(1) translateY(0);
+        -o-transform: scale(1) translateY(0);
+    }
+    
+    // Opciones (copia exacta)
+    .option {
+        cursor: pointer;
+        font-weight: 400;
+        line-height: 40px;
+        list-style: none;
+        min-height: 40px;
+        outline: none;
+        padding-left: 18px;
+        padding-right: 29px;
+        text-align: left;
+        -webkit-transition: all 0.2s;
+        transition: all 0.2s;
+        
+        // Estados hover y focus (copia exacta)
+        &:hover,
+        &.focus,
+        &.selected.focus {
+            background-color: #f6f6f6;
+        }
+        
+        // Opción seleccionada (copia exacta)
+        &.selected {
+            font-weight: 600;
+            color: #FF7101; // ← Color naranja exacto
+        }
+        
+        // Opción deshabilitada
+        &.disabled {
+            background-color: transparent;
+            color: #999;
+            cursor: default;
+        }
+    }
+}
+
+// Variantes adicionales si las necesitas
+.custom-select.wide {
+    width: 100%;
+    
+    .list {
+        left: 0 !important;
+        right: 0 !important;
+    }
+}
+
+.custom-select.small {
+    font-size: 12px;
+    height: 36px;
+    line-height: 34px;
+    
+    &::after {
+        height: 4px;
+        width: 4px;
+    }
+    
+    .option {
+        line-height: 34px;
+        min-height: 34px;
+    }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .custom-select {
+        font-size: 14px;
+        padding: 12px 15px;
+        
+        &::after {
+            right: 20px;
+        }
+        
+        .list {
+            font-size: 13px;
+            max-height: 120px;
+        }
+        
+        .option {
+            padding-left: 15px;
+            padding-right: 25px;
+            line-height: 36px;
+            min-height: 36px;
+        }
+    }
+}
+
+// ← IMPORTANTE: Usar ::ng-deep para que Angular no aisle los estilos
+::ng-deep .custom-select {
+    -webkit-tap-highlight-color: transparent;
+    background-color: #fff;
+    border: 1px solid #E5E5EA !important;
+    border-radius: 14px;
+    padding: 14px 17px;
+    box-sizing: border-box;
+    clear: both;
+    cursor: pointer;
+    display: block;
+    font-family: var(--paraFont);
+    font-size: 16px;
+    font-weight: 400;
+    outline: none;
+    position: relative;
+    transition: all linear .2s;
+    user-select: none;
+    white-space: nowrap;
+    width: 100%;
+    
+    // Estados activo, abierto y focus
+    &:active,
+    &.open,
+    &:focus {
+        border-color: #999;
+    }
+    
+    // Flecha exactamente igual
+    &::after {
+        border-bottom: 1.7px solid #3A3A3C;
+        border-right: 1.7px solid #3A3A3C;
+        content: '';
+        height: 8px;
+        width: 8px;
+        margin-top: -4px;
+        pointer-events: none;
+        position: absolute;
+        right: 24px;
+        top: 50%;
+        transform-origin: 66% 66%;
+        transform: rotate(45deg);
+        transition: all 0.15s ease-in-out;
+    }
+    
+    // Flecha cuando está abierto
+    &.open::after {
+        transform: rotate(-135deg);
+    }
+    
+    // Estado deshabilitado
+    &.disabled {
+        border-color: #ededed;
+        color: #999;
+        pointer-events: none;
+        
+        &::after {
+            border-color: #cccccc;
+        }
+    }
+    
+    // ← CRÍTICO: Lista desplegable con ::ng-deep
+    .list {
+        background-color: #fff !important;
+        border-radius: 5px !important;
+        box-shadow: 0 0 0 1px rgba(68, 68, 68, 0.11) !important;
+        box-sizing: border-box !important;
+        margin-top: 4px !important;
+        opacity: 0 !important;
+        overflow: hidden !important;
+        padding: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        transform-origin: 50% 0 !important;
+        transform: scale(0.75) translateY(-21px) !important;
+        transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out !important;
+        z-index: 1000 !important;
+        width: 100% !important;
+        font-size: 14px !important;
+        max-height: 155px !important;
+        overflow-y: auto !important;
+        list-style: none !important;
+        margin: 0 !important;
+        margin-top: 4px !important;
+        
+        // Scrollbar personalizada
+        &::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgb(0 0 0 / 30%);
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background-color: #a7a7a7;
+            border-radius: 5px;
+        }
+        
+        &::-webkit-scrollbar {
+            width: 6px;
+            height: 4px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        
+        // Efecto hover en lista
+        &:hover .option:not(:hover) {
+            background-color: transparent !important;
+        }
+    }
+    
+    // Lista cuando está abierto
+    &.open .list {
+        opacity: 1 !important;
+        z-index: 1000 !important;
+        pointer-events: auto !important;
+        transform: scale(1) translateY(0) !important;
+    }
+    
+    // ← CRÍTICO: Opciones con ::ng-deep
+    .option {
+        cursor: pointer !important;
+        font-weight: 400 !important;
+        line-height: 40px !important;
+        list-style: none !important;
+        min-height: 40px !important;
+        outline: none !important;
+        padding-left: 18px !important;
+        padding-right: 29px !important;
+        text-align: left !important;
+        transition: all 0.2s !important;
+        display: block !important;
+        margin: 0 !important;
+        
+        // Estados hover y focus
+        &:hover,
+        &.focus,
+        &.selected.focus {
+            background-color: #f6f6f6 !important;
+        }
+        
+        // ← CRÍTICO: Opción seleccionada
+        &.selected {
+            font-weight: 600 !important;
+            color: #FF7101 !important; // Color naranja exacto
+            background-color: transparent !important;
+        }
+        
+        // Opción deshabilitada
+        &.disabled {
+            background-color: transparent !important;
+            color: #999 !important;
+            cursor: default !important;
+        }
+    }
+}
+
+// ← TAMBIÉN agregar para el selector específico por ID
+::ng-deep #termSelector {
+    &.custom-select {
+        // Forzar estilos específicos
+        display: block !important;
+        
+        .list {
+            display: none !important;
+        }
+        
+        &.open .list {
+            display: block !important;
+        }
+    }
+}

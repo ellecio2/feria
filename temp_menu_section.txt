@@ -1,0 +1,103 @@
+  {
+    key: 'feria',
+    label: 'FERIA DE VEHÍCULOS',
+    isTitle: true,
+  },
+  {
+    key: 'vehicles',
+    icon: 'iconamoon:car-duotone',
+    label: 'Vehículos',
+    collapsed: true,
+    subMenu: [
+      {
+        key: 'vehicles-list',
+        label: 'Lista de Vehículos',
+        link: '/vehicles',
+        parentKey: 'vehicles',
+      },
+      {
+        key: 'vehicles-create',
+        label: 'Nuevo Vehículo',
+        link: '/vehicles/create',
+        parentKey: 'vehicles',
+      },
+      {
+        key: 'vehicles-import',
+        label: 'Importar Vehículos',
+        link: '/vehicles/import',
+        parentKey: 'vehicles',
+      },
+    ],
+  },
+  {
+    key: 'finance',
+    icon: 'iconamoon:certificate-badge-duotone',
+    label: 'Financiamiento',
+    collapsed: true,
+    subMenu: [
+      {
+        key: 'finance-applications',
+        label: 'Aplicaciones',
+        link: '/finance/applications',
+        parentKey: 'finance',
+      },
+      {
+        key: 'finance-companies',
+        label: 'Financieras',
+        link: '/finance/companies',
+        parentKey: 'finance',
+      },
+      {
+        key: 'finance-calculator',
+        label: 'Calculadora',
+        link: '/finance/calculator',
+        parentKey: 'finance',
+      },
+    ],
+  },
+  {
+    key: 'insurance',
+    icon: 'iconamoon:shield-yes-duotone',
+    label: 'Seguros',
+    collapsed: true,
+    subMenu: [
+      {
+        key: 'insurance-quotes',
+        label: 'Cotizaciones',
+        link: '/insurance/quotes',
+        parentKey: 'insurance',
+      },
+      {
+        key: 'insurance-companies',
+        label: 'Aseguradoras',
+        link: '/insurance/companies',
+        parentKey: 'insurance',
+      },
+    ],
+  },
+  {
+    key: 'sales',
+    icon: 'iconamoon:shopping-cart-duotone',
+    label: 'Ventas',
+    collapsed: true,
+    subMenu: [
+      {
+        key: 'sales-list',
+        label: 'Lista de Ventas',
+        link: '/sales',
+        parentKey: 'sales',
+      },
+      {
+        key: 'sales-reports',
+        label: 'Reportes',
+        link: '/sales/reports',
+        parentKey: 'sales',
+      },
+      {
+        key: 'sales-commissions',
+        label: 'Comisiones',
+        link: '/sales/commissions',
+        parentKey: 'sales',
+      },
+    ],
+  },
