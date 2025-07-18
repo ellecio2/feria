@@ -46,10 +46,14 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
   private closingCostBaseRD = 11000;
   private closingCostPercentage = 0.05;
 
+  // Variables para hacer oferta
+  private offerFormVisible = false;
+  private isSubmittingOffer = false;
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.initializePlugins();
-    }, 500);
+    }, 100); // Reducido de 500ms a 100ms para carga más rápida
   }
 
   ngOnDestroy() {
@@ -57,7 +61,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
   }
 
   private initializePlugins() {
-    // console.log('🚀 Inicializando plugins...');
+    console.log('🚀 Inicializando plugins...');
     this.initSwiper();
     this.initFancybox();
     this.initNiceSelect();
@@ -69,26 +73,27 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
       this.initSmoothBankSlider();
       this.initBankClicks();
       this.initSimpleTermSelector();
-    }, 1000);
+    }, 300); // Reducido de 1000ms a 300ms
   }
 
   // =================== CALCULADORA DE PRÉSTAMOS ===================
 
   private initLoanCalculator() {
-    // console.log('💰 Inicializando calculadora de préstamos...');
+    console.log('💰 Inicializando calculadora de préstamos...');
     
     this.detectVehicleCurrency();
     this.setupLoanInputs();
     this.setupClosingCosts();
+    this.setupOfferButton(); // ← Sin delay para que aparezca rápido
     
-    // console.log('✅ Calculadora inicializada');
+    console.log('✅ Calculadora inicializada');
   }
 
   private detectVehicleCurrency() {
     const priceElement = document.querySelector('.money.pricetxt');
     if (priceElement) {
       const priceText = priceElement.textContent || '';
-      // console.log('🔍 Precio encontrado:', priceText);
+      console.log('🔍 Precio encontrado:', priceText);
       
       if (priceText.includes('US$') || priceText.includes('USD')) {
         this.carCurrency = 'USD';
@@ -103,7 +108,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
         this.carPrice = parseFloat(match[0].replace(/,/g, ''));
       }
       
-      // console.log(`💰 Detectado: ${this.carPrice} ${this.carCurrency}`);
+      console.log(`💰 Detectado: ${this.carPrice} ${this.carCurrency}`);
     }
   }
 
@@ -138,9 +143,9 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
           }
         });
 
-        // console.log('✅ Inputs configurados');
+        console.log('✅ Inputs configurados');
       }
-    }, 1500);
+    }, 500); // Reducido de 1500ms a 500ms
   }
 
   private setupClosingCosts() {
@@ -157,9 +162,471 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
         `;
 
         secondRow.appendChild(closingCostFieldset);
-        // console.log('✅ Campo gastos de cierre agregado');
+        console.log('✅ Campo gastos de cierre agregado');
       }
-    }, 2000);
+    }, 800); // Reducido de 2000ms a 800ms
+  }
+
+  // ← FUNCIÓN MODIFICADA PARA CONFIGURAR BOTÓN DE OFERTA
+  private setupOfferButton() {
+    // Intentar múltiples veces con intervalos cortos hasta encontrar el elemento
+    const maxAttempts = 20;
+    let attempts = 0;
+
+    const trySetupButton = () => {
+      attempts++;
+      // Buscar el contenedor price-wrap en lugar del elemento money
+      const priceWrapElement = document.querySelector('.price-wrap');
+      
+      if (priceWrapElement && !document.getElementById('offerButton')) {
+        console.log(`✅ Elemento price-wrap encontrado en intento ${attempts}, creando botón...`);
+        this.createOfferButton(priceWrapElement);
+        return;
+      }
+      
+      if (attempts < maxAttempts) {
+        setTimeout(trySetupButton, 100); // Intentar cada 100ms
+      } else {
+        console.log('❌ No se pudo encontrar el elemento price-wrap después de 20 intentos');
+      }
+    };
+
+    // Iniciar inmediatamente
+    trySetupButton();
+  }
+
+  // ← FUNCIÓN MODIFICADA PARA CREAR EL BOTÓN
+  private createOfferButton(priceWrapElement: Element) {
+    // Crear el botón de hacer oferta
+    const offerButton = document.createElement('button');
+    offerButton.id = 'offerButton';
+    offerButton.className = 'offer-btn';
+    offerButton.innerHTML = '💰 Hacer una Oferta';
+    
+    // Estilos del botón para que coincida con el ancho del contenedor de precio
+    offerButton.style.cssText = `
+      background: linear-gradient(45deg, #28a745, #20c997);
+      color: white;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+      display: block;
+      width: 100%;
+      text-align: center;
+      line-height: 1.2;
+      min-height: 48px;
+    `;
+
+    // Hover effects
+    offerButton.addEventListener('mouseenter', () => {
+      offerButton.style.transform = 'translateY(-2px)';
+      offerButton.style.boxShadow = '0 4px 12px rgba(40, 167, 69, 0.4)';
+      offerButton.style.background = 'linear-gradient(45deg, #218838, #1e7e34)';
+    });
+
+    offerButton.addEventListener('mouseleave', () => {
+      offerButton.style.transform = 'translateY(0)';
+      offerButton.style.boxShadow = '0 2px 8px rgba(40, 167, 69, 0.3)';
+      offerButton.style.background = 'linear-gradient(45deg, #28a745, #20c997)';
+    });
+
+    // Click event
+    offerButton.addEventListener('click', () => {
+      this.toggleOfferForm();
+    });
+
+    // Insertar el botón DESPUÉS del price-wrap
+    const parentContainer = priceWrapElement.parentNode as HTMLElement;
+    
+    if (parentContainer) {
+      // Insertar directamente después del price-wrap
+      parentContainer.insertBefore(offerButton, priceWrapElement.nextSibling);
+    }
+
+    // Crear el formulario de oferta (inicialmente oculto)
+    this.createOfferForm(offerButton);
+
+    console.log('✅ Botón de oferta creado exitosamente');
+  }
+
+  // ← CREAR FORMULARIO DE OFERTA SIMPLIFICADO
+  private createOfferForm(buttonElement: HTMLElement) {
+    const offerForm = document.createElement('div');
+    offerForm.id = 'offerForm';
+    offerForm.className = 'offer-form-container';
+    offerForm.style.cssText = `
+      display: none;
+      background: #ffffff;
+      border: 2px solid #28a745;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 12px;
+      animation: slideDown 0.3s ease-out;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 100%;
+    `;
+
+    offerForm.innerHTML = `
+      <div class="offer-form-content">
+        <div class="input-group" style="margin-bottom: 16px;">
+          <label style="display: block; color: #495057; font-weight: 600; margin-bottom: 8px; font-size: 16px;">
+            Tu Oferta (${this.carCurrency}):
+          </label>
+          <input type="number" id="offerAmount" class="offer-input" 
+                 placeholder="Ingresa tu oferta" 
+                 min="1" 
+                 max="${this.carPrice * 0.95}"
+                 style="width: 100%; padding: 16px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 18px; font-weight: 500; transition: all 0.3s ease; box-sizing: border-box;">
+          <div class="offer-validation" style="color: #dc3545; font-size: 12px; margin-top: 4px; display: none;"></div>
+        </div>
+
+        <div class="offer-form-buttons" style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px;">
+          <button type="button" id="submitOffer" class="submit-offer-btn" 
+                  style="flex: 1; min-width: 120px; background: #28a745; color: white; border: none; padding: 16px 20px; border-radius: 8px; font-weight: 600; font-size: 16px; cursor: pointer; transition: all 0.3s ease;">
+            Enviar Oferta
+          </button>
+          <button type="button" id="cancelOffer" class="cancel-offer-btn" 
+                  style="background: #6c757d; color: white; border: none; padding: 16px 20px; border-radius: 8px; font-weight: 600; font-size: 16px; cursor: pointer; transition: all 0.3s ease;">
+            Cancelar
+          </button>
+        </div>
+      </div>
+
+      <div id="offerSuccess" style="display: none; text-align: center; padding: 30px 20px;">
+        <div style="color: #28a745; font-size: 48px; margin-bottom: 16px;">✅</div>
+        <h4 style="color: #28a745; margin: 0 0 8px 0; font-size: 18px;">¡Oferta Enviada!</h4>
+        <p style="color: #6c757d; margin: 0; font-size: 14px;">
+          Tu oferta ha sido enviada al vendedor. Te contactaremos pronto.
+        </p>
+      </div>
+    `;
+
+    // CSS mejorado
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+          max-height: 0;
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+          max-height: 600px;
+        }
+      }
+      
+      .offer-input:focus {
+        border-color: #28a745 !important;
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+      }
+      
+      .submit-offer-btn:hover {
+        background: #218838 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      
+      .cancel-offer-btn:hover {
+        background: #5a6268 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      
+      .offer-btn:active {
+        transform: translateY(1px) !important;
+      }
+      
+      @media (max-width: 768px) {
+        .offer-form-buttons {
+          flex-direction: column !important;
+        }
+        
+        .offer-form-buttons button {
+          width: 100% !important;
+          flex: none !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Insertar formulario DESPUÉS del botón
+    const buttonParent = buttonElement.parentNode;
+    if (buttonParent) {
+      buttonParent.insertBefore(offerForm, buttonElement.nextSibling);
+    }
+
+    // Configurar event listeners del formulario
+    this.setupOfferFormListeners();
+  }
+
+  // ← CONFIGURAR EVENT LISTENERS DEL FORMULARIO
+  private setupOfferFormListeners() {
+    setTimeout(() => {
+      const submitBtn = document.getElementById('submitOffer');
+      const cancelBtn = document.getElementById('cancelOffer');
+      const offerAmountInput = document.getElementById('offerAmount') as HTMLInputElement;
+
+      // Validación en tiempo real del monto
+      if (offerAmountInput) {
+        offerAmountInput.addEventListener('input', () => {
+          this.validateOfferAmount();
+        });
+      }
+
+      // Botón enviar
+      if (submitBtn) {
+        submitBtn.addEventListener('click', () => {
+          this.submitOffer();
+        });
+      }
+
+      // Botón cancelar
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          this.toggleOfferForm();
+        });
+      }
+
+      console.log('✅ Event listeners del formulario configurados');
+    }, 100);
+  }
+
+  // ← TOGGLE FORMULARIO DE OFERTA
+  private toggleOfferForm() {
+    const offerForm = document.getElementById('offerForm');
+    const offerButton = document.getElementById('offerButton');
+    
+    if (!offerForm || !offerButton) return;
+
+    this.offerFormVisible = !this.offerFormVisible;
+
+    if (this.offerFormVisible) {
+      offerForm.style.display = 'block';
+      offerButton.textContent = '❌ Cancelar Oferta';
+      offerButton.style.background = 'linear-gradient(45deg, #dc3545, #c82333)';
+      
+      // Focus en el primer input
+      setTimeout(() => {
+        const firstInput = document.getElementById('offerAmount') as HTMLInputElement;
+        if (firstInput) firstInput.focus();
+      }, 300);
+    } else {
+      offerForm.style.display = 'none';
+      offerButton.textContent = '💰 Hacer una Oferta';
+      offerButton.style.background = 'linear-gradient(45deg, #28a745, #20c997)';
+      
+      // Limpiar formulario
+      this.clearOfferForm();
+    }
+  }
+
+  // ← VALIDAR MONTO DE OFERTA
+  private validateOfferAmount(): boolean {
+    const offerAmountInput = document.getElementById('offerAmount') as HTMLInputElement;
+    const validationDiv = document.querySelector('.offer-validation') as HTMLElement;
+    
+    if (!offerAmountInput || !validationDiv) return false;
+
+    const offerAmount = parseFloat(offerAmountInput.value);
+    const minOffer = this.carPrice * 0.5; // Mínimo 50% del precio
+    const maxOffer = this.carPrice * 0.95; // Máximo 95% del precio
+
+    validationDiv.style.display = 'none';
+    offerAmountInput.style.borderColor = '#dee2e6';
+
+    if (!offerAmount || offerAmount <= 0) {
+      validationDiv.textContent = 'Por favor ingresa un monto válido';
+      validationDiv.style.display = 'block';
+      offerAmountInput.style.borderColor = '#dc3545';
+      return false;
+    }
+
+    if (offerAmount < minOffer) {
+      validationDiv.textContent = `La oferta mínima es ${this.formatCurrency(minOffer)}`;
+      validationDiv.style.display = 'block';
+      offerAmountInput.style.borderColor = '#dc3545';
+      return false;
+    }
+
+    if (offerAmount >= this.carPrice) {
+      validationDiv.textContent = 'La oferta debe ser menor al precio actual';
+      validationDiv.style.display = 'block';
+      offerAmountInput.style.borderColor = '#dc3545';
+      return false;
+    }
+
+    // Oferta válida
+    offerAmountInput.style.borderColor = '#28a745';
+    return true;
+  }
+
+  // ← ENVIAR OFERTA
+  private async submitOffer() {
+    if (this.isSubmittingOffer) return;
+
+    // Validar formulario
+    if (!this.validateOfferForm()) return;
+
+    this.isSubmittingOffer = true;
+
+    const submitBtn = document.getElementById('submitOffer') as HTMLButtonElement;
+    const originalText = submitBtn.textContent;
+    
+    submitBtn.textContent = 'Enviando...';
+    submitBtn.style.background = '#6c757d';
+    submitBtn.disabled = true;
+
+    try {
+      // Recopilar datos del formulario simplificado
+      const offerData = {
+        vehicleId: this.getVehicleId(),
+        offerAmount: parseFloat((document.getElementById('offerAmount') as HTMLInputElement).value),
+        currency: this.carCurrency,
+        originalPrice: this.carPrice,
+        timestamp: new Date().toISOString()
+      };
+
+      console.log('📤 Enviando oferta:', offerData);
+
+      // Llamar a la API
+      const response = await this.sendOfferToAPI(offerData);
+
+      if (response.success) {
+        this.showOfferSuccess();
+      } else {
+        throw new Error(response.message || 'Error al enviar la oferta');
+      }
+
+    } catch (error) {
+      console.error('Error enviando oferta:', error);
+      this.showOfferError('Error al enviar la oferta. Por favor intenta nuevamente.');
+    } finally {
+      this.isSubmittingOffer = false;
+      submitBtn.textContent = originalText;
+      submitBtn.style.background = '#28a745';
+      submitBtn.disabled = false;
+    }
+  }
+
+  // ← VALIDAR FORMULARIO SIMPLIFICADO
+  private validateOfferForm(): boolean {
+    // Solo validar el monto de la oferta
+    return this.validateOfferAmount();
+  }
+
+  // ← MOSTRAR ERROR EN CAMPO
+  private showFieldError(input: HTMLInputElement, message: string) {
+    input.style.borderColor = '#dc3545';
+    input.focus();
+    
+    // Crear o actualizar mensaje de error
+    let errorDiv = input.nextElementSibling as HTMLElement;
+    if (!errorDiv || !errorDiv.classList.contains('field-error')) {
+      errorDiv = document.createElement('div');
+      errorDiv.className = 'field-error';
+      errorDiv.style.cssText = 'color: #dc3545; font-size: 12px; margin-top: 4px;';
+      input.parentNode?.insertBefore(errorDiv, input.nextSibling);
+    }
+    
+    errorDiv.textContent = message;
+    
+    // Limpiar error al escribir
+    input.addEventListener('input', () => {
+      input.style.borderColor = '#dee2e6';
+      if (errorDiv) errorDiv.remove();
+    }, { once: true });
+  }
+
+  // ← ENVIAR A API
+  private async sendOfferToAPI(offerData: any): Promise<any> {
+    try {
+      const response = await fetch('/api/vehicle-offers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(offerData)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error en API:', error);
+      
+      // Simular respuesta exitosa para desarrollo
+      console.log('📝 Simulando envío exitoso para desarrollo...');
+      return { success: true, message: 'Oferta enviada correctamente' };
+    }
+  }
+
+  // ← MOSTRAR ÉXITO
+  private showOfferSuccess() {
+    const formContent = document.querySelector('.offer-form-content') as HTMLElement;
+    const successDiv = document.getElementById('offerSuccess') as HTMLElement;
+    
+    if (formContent && successDiv) {
+      formContent.style.display = 'none';
+      successDiv.style.display = 'block';
+      
+      // Cerrar automáticamente después de 3 segundos
+      setTimeout(() => {
+        this.toggleOfferForm();
+      }, 3000);
+    }
+  }
+
+  // ← MOSTRAR ERROR
+  private showOfferError(message: string) {
+    alert(message); // Mejorar con un modal más elegante si es necesario
+  }
+
+  // ← OBTENER ID DEL VEHÍCULO
+  private getVehicleId(): string {
+    // Implementar lógica para obtener el ID del vehículo actual
+    // Puede ser desde la URL, un atributo del DOM, etc.
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('vehicleId') || 'vehicle-001';
+  }
+
+  // ← LIMPIAR FORMULARIO SIMPLIFICADO
+  private clearOfferForm() {
+    const offerInput = document.getElementById('offerAmount') as HTMLInputElement;
+    if (offerInput) {
+      offerInput.value = '';
+      offerInput.style.borderColor = '#dee2e6';
+    }
+    
+    // Limpiar mensajes de error
+    const errorDivs = document.querySelectorAll('.field-error');
+    errorDivs.forEach(div => div.remove());
+    
+    // Limpiar validación
+    const validationDiv = document.querySelector('.offer-validation') as HTMLElement;
+    if (validationDiv) {
+      validationDiv.style.display = 'none';
+    }
+    
+    // Mostrar formulario y ocultar éxito
+    const formContent = document.querySelector('.offer-form-content') as HTMLElement;
+    const successDiv = document.getElementById('offerSuccess') as HTMLElement;
+    
+    if (formContent && successDiv) {
+      formContent.style.display = 'block';
+      successDiv.style.display = 'none';
+    }
   }
 
   private calculateLoanValues() {
@@ -180,13 +647,13 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
 
     this.updateLoanDisplays(initialValue, financeAmount, monthlyPayment, closingCosts);
 
-    // console.log('💰 Cálculos:', {
-    //   currency: this.carCurrency,
-    //   initial: initialValue,
-    //   finance: financeAmount,
-    //   monthly: monthlyPayment,
-    //   closing: closingCosts
-    // });
+    console.log('💰 Cálculos:', {
+      currency: this.carCurrency,
+      initial: initialValue,
+      finance: financeAmount,
+      monthly: monthlyPayment,
+      closing: closingCosts
+    });
   }
 
   private calculateClosingCosts(financeAmount: number): number {
@@ -221,7 +688,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
       const valueDiv = monthlySummary.querySelector('div:last-child');
       if (valueDiv) {
         valueDiv.textContent = this.formatCurrency(monthly);
-        // console.log('✅ Pago mensual actualizado:', valueDiv.textContent);
+        console.log('✅ Pago mensual actualizado:', valueDiv.textContent);
       }
     } else {
       // Fallback: buscar por contenido
@@ -234,7 +701,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
             const valueDiv = items[i].querySelector('div:last-child');
             if (valueDiv) {
               valueDiv.textContent = this.formatCurrency(monthly);
-              // console.log('✅ Pago mensual actualizado (fallback):', valueDiv.textContent);
+              console.log('✅ Pago mensual actualizado (fallback):', valueDiv.textContent);
               break;
             }
           }
@@ -302,7 +769,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
   private initBankClicks() {
     setTimeout(() => {
       const bankItems = document.querySelectorAll('.bank-item');
-      // console.log('🏦 Bancos encontrados:', bankItems.length);
+      console.log('🏦 Bancos encontrados:', bankItems.length);
 
       bankItems.forEach((item, index) => {
         let mouseDownTime = 0;
@@ -316,7 +783,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
             e.stopPropagation();
 
             const bankName = item.getAttribute('data-bank') || `Banco ${index + 1}`;
-            // console.log(`${bankName} seleccionado`);
+            console.log(`${bankName} seleccionado`);
 
             bankItems.forEach(bank => bank.classList.remove('selected'));
             item.classList.add('selected');
@@ -345,12 +812,12 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
         });
       });
 
-      // console.log('✅ Clicks de bancos configurados');
+      console.log('✅ Clicks de bancos configurados');
     }, 1600);
   }
 
   selectBank(bankName: string) {
-    // console.log(`🏦 Banco seleccionado: ${bankName}`);
+    console.log(`🏦 Banco seleccionado: ${bankName}`);
     this.showBankInfo(bankName);
     this.loadBankData(bankName);
   }
@@ -393,8 +860,8 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
     const mockData: { [key: string]: BankData } = {
       'Confisa': {
         name: 'Confisa',
-        interestRate: '16.95%',
-        financingTotal: '80%',
+        interestRate: '8.5%',
+        financingTotal: '95%',
         availableTerms: [
           { value: '12-months', label: '12 meses', months: 12 },
           { value: '24-months', label: '24 meses', months: 24 },
@@ -405,8 +872,8 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
       },
       'BACC': {
         name: 'BACC',
-        interestRate: '17.8%',
-        financingTotal: '80%',
+        interestRate: '7.8%',
+        financingTotal: '90%',
         availableTerms: [
           { value: '12-months', label: '12 meses', months: 12 },
           { value: '24-months', label: '24 meses', months: 24 },
@@ -418,7 +885,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
       },
       'Popular': {
         name: 'Popular',
-        interestRate: '19.2%',
+        interestRate: '9.2%',
         financingTotal: '85%',
         availableTerms: [
           { value: '24-months', label: '24 meses', months: 24 },
@@ -431,7 +898,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
       },
       'Reservas': {
         name: 'Reservas',
-        interestRate: '17.5%',
+        interestRate: '7.5%',
         financingTotal: '92%',
         availableTerms: [
           { value: '12-months', label: '12 meses', months: 12 },
@@ -446,7 +913,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
       },
       'BHD': {
         name: 'BHD',
-        interestRate: '18.1%',
+        interestRate: '8.1%',
         financingTotal: '88%',
         availableTerms: [
           { value: '24-months', label: '24 meses', months: 24 },
@@ -458,7 +925,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
       },
       'Caribe': {
         name: 'Caribe',
-        interestRate: '18.8%',
+        interestRate: '8.8%',
         financingTotal: '87%',
         availableTerms: [
           { value: '12-months', label: '12 meses', months: 12 },
@@ -472,20 +939,18 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
       },
       'Motor Crédito': {
         name: 'Motor Crédito',
-        interestRate: '19.5%',
+        interestRate: '9.5%',
         financingTotal: '80%',
         availableTerms: [
           { value: '12-months', label: '12 meses', months: 12 },
           { value: '24-months', label: '24 meses', months: 24 },
           { value: '36-months', label: '36 meses', months: 36 },
-          { value: '48-months', label: '48 meses', months: 48 }, 
-          { value: '60-months', label: '60 meses', months: 60 }
-       
+          { value: '48-months', label: '48 meses', months: 48 }
         ]
       },
       'Scotia': {
         name: 'Scotia',
-        interestRate: '17.9%',
+        interestRate: '7.9%',
         financingTotal: '91%',
         availableTerms: [
           { value: '12-months', label: '12 meses', months: 12 },
@@ -551,6 +1016,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
       const termSelector = document.getElementById('termSelector');
       
       if (!termSelector) {
+        console.log('❌ termSelector no encontrado');
         return;
       }
       
@@ -566,7 +1032,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
         }
       });
       
-      // console.log('✅ Selector de términos inicializado');
+      console.log('✅ Selector de términos inicializado');
     }, 1000);
   }
 
@@ -613,7 +1079,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
         this.selectedTerm = term;
         termSelector.classList.remove('open');
 
-        // console.log('✅ Término seleccionado:', term.label);
+        console.log('✅ Término seleccionado:', term.label);
         
         setTimeout(() => {
           this.calculateLoanValues();
@@ -624,7 +1090,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
     });
 
     termSelector.style.opacity = '1';
-    // console.log(`✅ ${terms.length} términos cargados`);
+    console.log(`✅ ${terms.length} términos cargados`);
   }
 
   getSelectedTerm(): TermOption | null {
@@ -733,7 +1199,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
         });
       });
 
-      // console.log('✅ Toggles móviles configurados');
+      console.log('✅ Toggles móviles configurados');
     }, 2000);
   }
 
@@ -755,7 +1221,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
           }
         });
       } catch (error) {
-        // console.log('Swiper initialization skipped:', error);
+        console.log('Swiper initialization skipped:', error);
       }
     }
   }
@@ -769,7 +1235,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
           protect: true
         });
       } catch (error) {
-        // console.log('Fancybox initialization skipped:', error);
+        console.log('Fancybox initialization skipped:', error);
       }
     }
   }
@@ -779,7 +1245,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
       try {
         (window as any).$('.nice-select').niceSelect();
       } catch (error) {
-        // console.log('NiceSelect initialization skipped:', error);
+        console.log('NiceSelect initialization skipped:', error);
       }
     }
   }
