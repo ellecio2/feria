@@ -57,7 +57,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
   }
 
   private initializePlugins() {
-    console.log('🚀 Inicializando plugins...');
+    // console.log('🚀 Inicializando plugins...');
     this.initSwiper();
     this.initFancybox();
     this.initNiceSelect();
@@ -75,20 +75,20 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
   // =================== CALCULADORA DE PRÉSTAMOS ===================
 
   private initLoanCalculator() {
-    console.log('💰 Inicializando calculadora de préstamos...');
+    // console.log('💰 Inicializando calculadora de préstamos...');
     
     this.detectVehicleCurrency();
     this.setupLoanInputs();
     this.setupClosingCosts();
     
-    console.log('✅ Calculadora inicializada');
+    // console.log('✅ Calculadora inicializada');
   }
 
   private detectVehicleCurrency() {
     const priceElement = document.querySelector('.money.pricetxt');
     if (priceElement) {
       const priceText = priceElement.textContent || '';
-      console.log('🔍 Precio encontrado:', priceText);
+      // console.log('🔍 Precio encontrado:', priceText);
       
       if (priceText.includes('US$') || priceText.includes('USD')) {
         this.carCurrency = 'USD';
@@ -103,7 +103,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
         this.carPrice = parseFloat(match[0].replace(/,/g, ''));
       }
       
-      console.log(`💰 Detectado: ${this.carPrice} ${this.carCurrency}`);
+      // console.log(`💰 Detectado: ${this.carPrice} ${this.carCurrency}`);
     }
   }
 
@@ -138,7 +138,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
           }
         });
 
-        console.log('✅ Inputs configurados');
+        // console.log('✅ Inputs configurados');
       }
     }, 1500);
   }
@@ -157,7 +157,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
         `;
 
         secondRow.appendChild(closingCostFieldset);
-        console.log('✅ Campo gastos de cierre agregado');
+        // console.log('✅ Campo gastos de cierre agregado');
       }
     }, 2000);
   }
@@ -180,13 +180,13 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
 
     this.updateLoanDisplays(initialValue, financeAmount, monthlyPayment, closingCosts);
 
-    console.log('💰 Cálculos:', {
-      currency: this.carCurrency,
-      initial: initialValue,
-      finance: financeAmount,
-      monthly: monthlyPayment,
-      closing: closingCosts
-    });
+    // console.log('💰 Cálculos:', {
+    //   currency: this.carCurrency,
+    //   initial: initialValue,
+    //   finance: financeAmount,
+    //   monthly: monthlyPayment,
+    //   closing: closingCosts
+    // });
   }
 
   private calculateClosingCosts(financeAmount: number): number {
@@ -221,7 +221,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
       const valueDiv = monthlySummary.querySelector('div:last-child');
       if (valueDiv) {
         valueDiv.textContent = this.formatCurrency(monthly);
-        console.log('✅ Pago mensual actualizado:', valueDiv.textContent);
+        // console.log('✅ Pago mensual actualizado:', valueDiv.textContent);
       }
     } else {
       // Fallback: buscar por contenido
@@ -234,7 +234,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
             const valueDiv = items[i].querySelector('div:last-child');
             if (valueDiv) {
               valueDiv.textContent = this.formatCurrency(monthly);
-              console.log('✅ Pago mensual actualizado (fallback):', valueDiv.textContent);
+              // console.log('✅ Pago mensual actualizado (fallback):', valueDiv.textContent);
               break;
             }
           }
@@ -302,7 +302,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
   private initBankClicks() {
     setTimeout(() => {
       const bankItems = document.querySelectorAll('.bank-item');
-      console.log('🏦 Bancos encontrados:', bankItems.length);
+      // console.log('🏦 Bancos encontrados:', bankItems.length);
 
       bankItems.forEach((item, index) => {
         let mouseDownTime = 0;
@@ -316,7 +316,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
             e.stopPropagation();
 
             const bankName = item.getAttribute('data-bank') || `Banco ${index + 1}`;
-            console.log(`${bankName} seleccionado`);
+            // console.log(`${bankName} seleccionado`);
 
             bankItems.forEach(bank => bank.classList.remove('selected'));
             item.classList.add('selected');
@@ -345,12 +345,12 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
         });
       });
 
-      console.log('✅ Clicks de bancos configurados');
+      // console.log('✅ Clicks de bancos configurados');
     }, 1600);
   }
 
   selectBank(bankName: string) {
-    console.log(`🏦 Banco seleccionado: ${bankName}`);
+    // console.log(`🏦 Banco seleccionado: ${bankName}`);
     this.showBankInfo(bankName);
     this.loadBankData(bankName);
   }
@@ -551,7 +551,6 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
       const termSelector = document.getElementById('termSelector');
       
       if (!termSelector) {
-        console.log('❌ termSelector no encontrado');
         return;
       }
       
@@ -567,7 +566,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
         }
       });
       
-      console.log('✅ Selector de términos inicializado');
+      // console.log('✅ Selector de términos inicializado');
     }, 1000);
   }
 
@@ -614,7 +613,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
         this.selectedTerm = term;
         termSelector.classList.remove('open');
 
-        console.log('✅ Término seleccionado:', term.label);
+        // console.log('✅ Término seleccionado:', term.label);
         
         setTimeout(() => {
           this.calculateLoanValues();
@@ -625,7 +624,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
     });
 
     termSelector.style.opacity = '1';
-    console.log(`✅ ${terms.length} términos cargados`);
+    // console.log(`✅ ${terms.length} términos cargados`);
   }
 
   getSelectedTerm(): TermOption | null {
@@ -734,7 +733,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
         });
       });
 
-      console.log('✅ Toggles móviles configurados');
+      // console.log('✅ Toggles móviles configurados');
     }, 2000);
   }
 
@@ -756,7 +755,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
           }
         });
       } catch (error) {
-        console.log('Swiper initialization skipped:', error);
+        // console.log('Swiper initialization skipped:', error);
       }
     }
   }
@@ -770,7 +769,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
           protect: true
         });
       } catch (error) {
-        console.log('Fancybox initialization skipped:', error);
+        // console.log('Fancybox initialization skipped:', error);
       }
     }
   }
@@ -780,7 +779,7 @@ export class CarViewComponent implements AfterViewInit, OnDestroy {
       try {
         (window as any).$('.nice-select').niceSelect();
       } catch (error) {
-        console.log('NiceSelect initialization skipped:', error);
+        // console.log('NiceSelect initialization skipped:', error);
       }
     }
   }
