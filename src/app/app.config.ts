@@ -31,6 +31,8 @@ import { AuthenticationEffects } from './store/authentication/authentication.eff
 import { provideToastr } from 'ngx-toastr'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { BrowserModule } from '@angular/platform-browser'
+import { ApiInterceptor } from './core/interceptors/api.interceptor'
+import { AuthInterceptor } from './core/interceptors/auth.interceptor'
 
 // scroll
 const scrollConfig: InMemoryScrollingOptions = {
@@ -44,6 +46,17 @@ const inMemoryScrollingFeatures: InMemoryScrollingFeature =
 export const appConfig: ApplicationConfig = {
   providers: [
     FakeBackendProvider,
+    // Interceptors
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, inMemoryScrollingFeatures),
     DecimalPipe,
