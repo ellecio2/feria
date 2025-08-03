@@ -83,5 +83,10 @@ export const VIEW_ROUTES: Route[] = [
     path: 'vehicles',
     loadChildren: () =>
       import('./vehicles/vehicles.route').then((mod) => mod.VEHICLES_ROUTES),
+  },
+  {
+    path: 'finance',
+    loadChildren: () =>
+      import('./finance/finance.route').then((mod) => mod.FINANCE_ROUTES),
   }
 ]

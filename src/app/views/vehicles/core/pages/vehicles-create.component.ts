@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { VehiclesService } from '../../../core/services/api/vehicles.service';
-import { CreateVehicleDto } from '../../../core/models';
-import { VehiclesCreateFormComponent } from './forms/vehicles-create-form.component';
+import { VehiclesService } from '../../../../core/services/api/vehicles.service';
+import { CreateVehicleDto } from '../../../../core/models';
+import { VehiclesCreateFormComponent } from '../forms/vehicles-create-form.component';
 
 @Component({
   selector: 'app-vehicles-create',

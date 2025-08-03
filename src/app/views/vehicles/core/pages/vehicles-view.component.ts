@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { VehiclesService } from '../../../core/services/api/vehicles.service';
-import { Vehicle, VehicleStatus } from '../../../core/models';
+import { VehiclesService } from '../../../../core/services/api/vehicles.service';
+import { Vehicle, VehicleStatus } from '../../../../core/models';
 
 @Component({
   selector: 'app-vehicles-view',

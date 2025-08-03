@@ -1,8 +1,8 @@
 import { Route } from '@angular/router';
 import { VehiclesListComponent } from './vehicles-list.component';
-import { VehiclesCreateComponent } from './core/vehicles-create.component';
-import { VehiclesViewComponent } from './core/vehicles-view.component';
-import { VehiclesUpdateComponent } from './core/vehicles-update.component';
+import { VehiclesCreateComponent } from './core/pages/vehicles-create.component';
+import { VehiclesViewComponent } from './core/pages/vehicles-view.component';
+import { VehiclesUpdateComponent } from './core/pages/vehicles-update.component';
 
 export const VEHICLES_ROUTES: Route[] = [
   {

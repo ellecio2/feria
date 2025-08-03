@@ -1,9 +1,9 @@
 import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { VehiclesService } from '../../../core/services/api/vehicles.service';
-import { Vehicle, UpdateVehicleDto } from '../../../core/models';
-import { VehiclesUpdateFormComponent } from './forms/vehicles-update-form.component';
+import { VehiclesService } from '../../../../core/services/api/vehicles.service';
+import { Vehicle, UpdateVehicleDto } from '../../../../core/models';
+import { VehiclesUpdateFormComponent } from '../forms/vehicles-update-form.component';
 
 @Component({
   selector: 'app-vehicles-update',
