@@ -5,6 +5,7 @@ export * from './api/vehicles.service';
 
 /* Finance - Services */
 export * from './api/finance-companies.service';
+export * from './api/finance-applications.service';
 
 /* Auth - Services */
 export * from './auth.service';

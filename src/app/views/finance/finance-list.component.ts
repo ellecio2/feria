@@ -37,6 +37,9 @@ import { FinanceCompaniesDeleteModalComponent } from './core/modals/finance-comp
                 </div>
                 <div class="col-auto">
                   <div class="d-flex gap-2">
+                    <button class="btn btn-info" routerLink="/finance/applications">
+                      <i class="bx bx-file-blank me-1"></i> Solicitudes
+                    </button>
                     <button class="btn btn-info" routerLink="/finance/calculator">
                       <i class="bx bx-calculator me-1"></i> Calculadora
                     </button>
